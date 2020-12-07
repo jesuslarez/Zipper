@@ -33,7 +33,7 @@ public class Zip {
             Iterator i = files.iterator();
             while (i.hasNext()) {
                 String filename = (String) i.next();
-                FileInputStream fi = new FileInputStream(filePath + "\\" + filename);
+                FileInputStream fi = new FileInputStream(parentPath + "\\" + filename);
                 origin = new BufferedInputStream(fi, 4096);
                 ZipEntry entry = new ZipEntry(filename);
                 out.putNextEntry(entry);
