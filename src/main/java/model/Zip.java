@@ -16,7 +16,7 @@ public class Zip {
     private static double totalFiles;
     private static JProgressBar JProgressBar;
 
-    public static void compress(List<String> files, String filePath, String parentPath, String parentName, JProgressBar JProgressBar) {
+    public static void compress(List<String> files, String filePath, String parentPath, JProgressBar JProgressBar) {
         String separator = System.getProperty("file.separator");
         double porcentaje = 0;
         try {
@@ -24,14 +24,8 @@ public class Zip {
             BufferedInputStream origin = null;
             // Objeto para referenciar el archivo zip de salida
             FileOutputStream dest = null;
-
-            if (filePath.equals(parentPath)) {
-                dest = new FileOutputStream(filePath + separator + parentName + ".zip");
-                System.out.println(filePath + separator + parentName + ".zip");
-            } else {
-                dest = new FileOutputStream(filePath + ".zip");
-                System.out.println(filePath + ".zip");
-            }
+            dest = new FileOutputStream(filePath + ".zip");
+            System.out.println(filePath + ".zip");
 
             ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
             // Buffer de transferencia para almacenar datos a comprimir

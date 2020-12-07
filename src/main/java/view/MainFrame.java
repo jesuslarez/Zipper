@@ -171,7 +171,6 @@ public class MainFrame extends javax.swing.JFrame {
         FileNameExtensionFilter fileNameExtensionFilter = new FileNameExtensionFilter("Zip", new String[]{"Zip"});
         jFileChooserSave.addChoosableFileFilter(fileNameExtensionFilter);
         jFileChooserSave.setAcceptAllFileFilterUsed(false);
-        jFileChooserSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         if (filesJList.getSelectedValuesList().isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "You must select at least one item from the list");
         } else {

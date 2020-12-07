@@ -56,7 +56,7 @@ public class ProgressFrame extends javax.swing.JFrame {
         
         @Override
         protected Void doInBackground() throws Exception{
-            Zip.compress(files, filePath, parentPath, parentName, JProgressBar);
+            Zip.compress(files, filePath, parentPath, JProgressBar);
             return null;
         }
         
