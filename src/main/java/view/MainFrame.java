@@ -23,7 +23,9 @@ public class MainFrame extends javax.swing.JFrame {
         setResizable(false);
         setLocationRelativeTo(null);
         jFileChooserOpen = new JFileChooser();
-
+        FileNameExtensionFilter fileNameExtensionFilterOpen = new FileNameExtensionFilter("Directory", new String[]{"directory"});
+        jFileChooserOpen.setAcceptAllFileFilterUsed(false);
+        jFileChooserOpen.addChoosableFileFilter(fileNameExtensionFilterOpen);
         jFileChooserOpen.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
 
         this.setTitle("Zipper - By Ignacio Marín & Jesús Lárez");
@@ -68,6 +70,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         exitJMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_E, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         exitJMenuItem.setText("Exit");
+        exitJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                exitJMenuItemActionPerformed(evt);
+            }
+        });
         fileJMenu.add(exitJMenuItem);
 
         jMenuBar1.add(fileJMenu);
@@ -77,6 +84,11 @@ public class MainFrame extends javax.swing.JFrame {
 
         aboutJMenuItem.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_A, java.awt.event.InputEvent.CTRL_DOWN_MASK));
         aboutJMenuItem.setText("About");
+        aboutJMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                aboutJMenuItemActionPerformed(evt);
+            }
+        });
         helpJMenu.add(aboutJMenuItem);
 
         jMenuBar1.add(helpJMenu);
@@ -108,19 +120,25 @@ public class MainFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
+    
+    
+    private class FilterZip implements FileFilter{
+        @Override
+        public boolean accept(File file) {
+            boolean isFile = file.isFile();
+            return isFile;
+        }
+    }
+    
     private void openDirectoryJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDirectoryJMenuItemActionPerformed
         int res = jFileChooserOpen.showOpenDialog(null);
         if (res == JFileChooser.APPROVE_OPTION) {
             path = jFileChooserOpen.getSelectedFile().getAbsolutePath();
-            FileFilter textFilefilter = new FileFilter() {
-                @Override
-                public boolean accept(File file) {
-                    boolean isFile = file.isFile();
-                    return isFile;
-                }
-            };
-            loadFiles(new File(path).listFiles(textFilefilter));
+            if (new File(path).listFiles(new FilterZip()) == null){
+                JOptionPane.showMessageDialog(rootPane, "That directory does not exist");
+            } else{
+                loadFiles(new File(path).listFiles(new FilterZip()));
+            }
         }
     }
 
@@ -150,21 +168,39 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void compressJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compressJButtonActionPerformed
         jFileChooserSave = new JFileChooser(new File(path));
-        
+        FileNameExtensionFilter fileNameExtensionFilter = new FileNameExtensionFilter("Zip", new String[]{"Zip"});
+        jFileChooserSave.addChoosableFileFilter(fileNameExtensionFilter);
+        jFileChooserSave.setAcceptAllFileFilterUsed(false);
         jFileChooserSave.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
         if (filesJList.getSelectedValuesList().isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "You must select at least one item from the list");
         } else {
             if (jFileChooserSave.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
-                Zip.compress(filesJList.getSelectedValuesList(), 
+                ProgressFrame progressFrame = new ProgressFrame(
+                        filesJList.getSelectedValuesList(), 
                         jFileChooserSave.getSelectedFile().getAbsolutePath(),
                         new File(path).getAbsolutePath(),new File(path).getName());
-                new ProgressFrame().setVisible(true);
+                progressFrame.setVisible(true);
+                loadFiles(new File(path).listFiles(new FilterZip()));
             }
         }
 
 
     }//GEN-LAST:event_compressJButtonActionPerformed
+
+    private void exitJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitJMenuItemActionPerformed
+        int res = JOptionPane.showConfirmDialog(rootPane, "Are you sure you wanna exit?", "Exit", JOptionPane.YES_OPTION);
+        if (res == 0) {
+            System.exit(0);
+        }
+    }//GEN-LAST:event_exitJMenuItemActionPerformed
+
+    private void aboutJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutJMenuItemActionPerformed
+        JOptionPane.showMessageDialog(rootPane, "Zipper is based on Swing from the Java Library."
+                + "\nThe program compress files. "
+                + "\nVersion 1.0 - GitHub information: https://github.com/jesuslarez/Zipper");
+    }//GEN-LAST:event_aboutJMenuItemActionPerformed
+    
     public void loadFiles(File[] files) {
         DefaultListModel model = new DefaultListModel();
         for (File file : files) {

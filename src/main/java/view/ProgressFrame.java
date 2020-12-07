@@ -1,11 +1,21 @@
 package view;
 
 import javax.swing.SwingWorker;
+import java.util.List;
+import model.Zip;
 
 public class ProgressFrame extends javax.swing.JFrame {
 
+    private List<String> files;
+    private String filePath;
+    private String parentPath;
+    private String parentName;
 
-    public ProgressFrame() {
+    public ProgressFrame(List<String> files, String filePath, String parentPath, String parentName) {
+        this.files = files;
+        this.filePath = filePath;
+        this.parentPath = parentPath;
+        this.parentName = parentName;
         setLookAndFeel();
         initComponents();
         setResizable(false);
@@ -46,12 +56,10 @@ public class ProgressFrame extends javax.swing.JFrame {
         
         @Override
         protected Void doInBackground() throws Exception{
-            for (int i = 0; i <= 100; i++) {
-                Thread.sleep(100);
-                JProgressBar.setValue(i);
-            }
+            Zip.compress(files, filePath, parentPath, parentName, JProgressBar);
             return null;
         }
+        
         @Override
         public void done(){
             doneJButton.setEnabled(true);
