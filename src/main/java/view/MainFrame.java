@@ -1,20 +1,16 @@
 package view;
 
-import java.awt.Color;
 import java.io.File;
 import java.io.FileFilter;
 import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
-import javax.swing.SwingWorker;
 import javax.swing.filechooser.FileNameExtensionFilter;
-import model.Zip;
 
 public class MainFrame extends javax.swing.JFrame {
 
     private final JFileChooser jFileChooserOpen;
     private JFileChooser jFileChooserSave;
-
     private String path;
 
     public MainFrame() {
@@ -27,7 +23,6 @@ public class MainFrame extends javax.swing.JFrame {
         jFileChooserOpen.setAcceptAllFileFilterUsed(false);
         jFileChooserOpen.addChoosableFileFilter(fileNameExtensionFilterOpen);
         jFileChooserOpen.setFileSelectionMode(JFileChooser.DIRECTORIES_ONLY);
-
         this.setTitle("Zipper - By Ignacio Marín & Jesús Lárez");
     }
 
@@ -183,8 +178,6 @@ public class MainFrame extends javax.swing.JFrame {
                 loadFiles(new File(path).listFiles(new FilterZip()));
             }
         }
-
-
     }//GEN-LAST:event_compressJButtonActionPerformed
 
     private void exitJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitJMenuItemActionPerformed
@@ -196,7 +189,7 @@ public class MainFrame extends javax.swing.JFrame {
 
     private void aboutJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_aboutJMenuItemActionPerformed
         JOptionPane.showMessageDialog(rootPane, "Zipper is based on Swing from the Java Library."
-                + "\nThe program compress files. "
+                + "\nThis program compresses files. "
                 + "\nVersion 1.0 - GitHub information: https://github.com/jesuslarez/Zipper");
     }//GEN-LAST:event_aboutJMenuItemActionPerformed
     
@@ -207,8 +200,6 @@ public class MainFrame extends javax.swing.JFrame {
         }
         filesJList.setModel(model);
     }
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenuItem aboutJMenuItem;
     private javax.swing.JButton compressJButton;

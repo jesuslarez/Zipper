@@ -2,7 +2,6 @@ package model;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Iterator;
@@ -18,7 +17,7 @@ public class Zip {
 
     public static void compress(List<String> files, String filePath, String parentPath, JProgressBar JProgressBar) {
         String separator = System.getProperty("file.separator");
-        double porcentaje = 0;
+        double percentage = 0;
         try {
             // Objeto para referenciar a los archivos que queremos comprimir
             BufferedInputStream origin = null;
@@ -26,7 +25,6 @@ public class Zip {
             FileOutputStream dest = null;
             dest = new FileOutputStream(filePath + ".zip");
             System.out.println(filePath + ".zip");
-
             ZipOutputStream out = new ZipOutputStream(new BufferedOutputStream(dest));
             // Buffer de transferencia para almacenar datos a comprimir
             byte[] data = new byte[4096];
@@ -47,8 +45,8 @@ public class Zip {
                 }
                 contFiles++;
                 Thread.sleep(1000);
-                porcentaje = (contFiles / totalFiles) * 100;
-                JProgressBar.setValue((int) porcentaje);
+                percentage = (contFiles / totalFiles) * 100;
+                JProgressBar.setValue((int) percentage);
                 // Cerramos el archivo origen, ya enviado a comprimir
                 origin.close();
             }
