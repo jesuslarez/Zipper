@@ -6,6 +6,7 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.plaf.FileChooserUI;
 
 public class MainFrame extends javax.swing.JFrame {
 
@@ -115,23 +116,23 @@ public class MainFrame extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-    
-    
-    private class FilterZip implements FileFilter{
+
+    private class FilterZip implements FileFilter {
+
         @Override
         public boolean accept(File file) {
             boolean isFile = file.isFile();
             return isFile;
         }
     }
-    
+
     private void openDirectoryJMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_openDirectoryJMenuItemActionPerformed
         int res = jFileChooserOpen.showOpenDialog(null);
         if (res == JFileChooser.APPROVE_OPTION) {
             path = jFileChooserOpen.getSelectedFile().getAbsolutePath();
-            if (new File(path).listFiles(new FilterZip()) == null){
+            if (new File(path).listFiles(new FilterZip()) == null) {
                 JOptionPane.showMessageDialog(rootPane, "That directory does not exist");
-            } else{
+            } else {
                 loadFiles(new File(path).listFiles(new FilterZip()));
             }
         }
@@ -162,18 +163,21 @@ public class MainFrame extends javax.swing.JFrame {
     }//GEN-LAST:event_openDirectoryJMenuItemActionPerformed
 
     private void compressJButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_compressJButtonActionPerformed
-        jFileChooserSave = new JFileChooser(new File(path));
+        jFileChooserSave = new JFileChooser();
+        jFileChooserSave.setSelectedFile(new File(jFileChooserOpen.getSelectedFile().getName()));
         FileNameExtensionFilter fileNameExtensionFilter = new FileNameExtensionFilter("Zip", new String[]{"Zip"});
         jFileChooserSave.addChoosableFileFilter(fileNameExtensionFilter);
         jFileChooserSave.setAcceptAllFileFilterUsed(false);
+
+        jFileChooserSave.setCurrentDirectory(jFileChooserOpen.getSelectedFile());
         if (filesJList.getSelectedValuesList().isEmpty()) {
             JOptionPane.showMessageDialog(rootPane, "You must select at least one item from the list");
         } else {
             if (jFileChooserSave.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
                 ProgressFrame progressFrame = new ProgressFrame(
-                        filesJList.getSelectedValuesList(), 
+                        filesJList.getSelectedValuesList(),
                         jFileChooserSave.getSelectedFile().getAbsolutePath(),
-                        new File(path).getAbsolutePath(),new File(path).getName());
+                        new File(path).getAbsolutePath(), new File(path).getName());
                 progressFrame.setVisible(true);
                 loadFiles(new File(path).listFiles(new FilterZip()));
             }
@@ -192,7 +196,7 @@ public class MainFrame extends javax.swing.JFrame {
                 + "\nThis program compresses files. "
                 + "\nVersion 1.0 - GitHub information: https://github.com/jesuslarez/Zipper");
     }//GEN-LAST:event_aboutJMenuItemActionPerformed
-    
+
     public void loadFiles(File[] files) {
         DefaultListModel model = new DefaultListModel();
         for (File file : files) {
